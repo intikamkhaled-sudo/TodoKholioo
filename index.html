@@ -1,724 +1,459 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
     <title>Kholioo — Personal Productivity</title>
 
-    <link rel="stylesheet" href="./style.css">
-</head>
+    <link rel="stylesheet" href="./style.css" />
+  </head>
 
-<body>
-
+  <body>
     <!-- =====================================================
          LOGIN SCREEN
     ====================================================== -->
 
     <div id="authScreen" class="auth-screen">
-
-        <div class="auth-card">
-
-            <div class="auth-logo">
-                <img src="logo.jpg" alt="Kholioo">
-            </div>
-
-            <div class="auth-brand">
-                Kholioo
-            </div>
-
-            <p class="auth-subtitle" id="authSubtitle">
-                Your private productivity space
-            </p>
-
-            <form id="authForm">
-
-                <div class="auth-field">
-                    <label for="username">Username</label>
-
-                    <input
-                        type="text"
-                        id="username"
-                        placeholder="Enter your username"
-                        autocomplete="username"
-                        required
-                    >
-                </div>
-
-                <div class="auth-field">
-                    <label for="password">Password</label>
-
-                    <div class="password-wrapper">
-
-                        <input
-                            type="password"
-                            id="password"
-                            placeholder="Enter your password"
-                            autocomplete="current-password"
-                            required
-                        >
-
-                        <button
-                            type="button"
-                            id="togglePassword"
-                            class="password-toggle"
-                        >
-                            Show
-                        </button>
-
-                    </div>
-                </div>
-
-                <p
-                    id="authError"
-                    class="auth-error"
-                ></p>
-
-                <button
-                    type="submit"
-                    class="auth-submit"
-                    id="authSubmit"
-                >
-                    Create Private Space
-                </button>
-
-            </form>
-
-            <div class="security-note">
-                <span>🔐</span>
-                <span>
-                    Your tasks are encrypted and stored locally on this device.
-                </span>
-            </div>
-
+      <div class="auth-card">
+        <div class="auth-logo">
+          <img src="logo.jpg" alt="Kholioo" />
         </div>
 
-    </div>
+        <div class="auth-brand" id="authBrand">Welcome</div>
 
+        <p class="auth-subtitle" id="authSubtitle">
+          Your private productivity space
+        </p>
+
+        <form id="authForm">
+          <div class="auth-field">
+            <label for="username">Username</label>
+
+            <input
+              type="text"
+              id="username"
+              placeholder="Enter your username"
+              autocomplete="username"
+              required
+            />
+          </div>
+
+          <div class="auth-field">
+            <label for="password">Password</label>
+
+            <div class="password-wrapper">
+              <input
+                type="password"
+                id="password"
+                placeholder="Enter your password"
+                autocomplete="current-password"
+                required
+              />
+
+              <button type="button" id="togglePassword" class="password-toggle">
+                Show
+              </button>
+            </div>
+          </div>
+
+          <p id="authError" class="auth-error"></p>
+
+          <button type="submit" class="auth-submit" id="authSubmit">
+            Create Private Space
+          </button>
+        </form>
+
+        <div class="security-note">
+          <span>🔐</span>
+          <span>
+            Your tasks are encrypted and stored locally on this device.
+          </span>
+        </div>
+      </div>
+    </div>
 
     <!-- =====================================================
          APP
     ====================================================== -->
 
     <div id="app" class="app hidden">
+      <!-- HEADER -->
 
-        <!-- HEADER -->
+      <header class="app-header">
+        <div class="brand">
+          <div class="logo-wrapper">
+            <img src="logo.jpg" alt="Kholioo Logo" class="logo" />
+          </div>
 
-        <header class="app-header">
+          <div>
+            <div class="brand-name" id="brandName">Welcome</div>
 
-            <div class="brand">
+            <div class="brand-user" id="brandUser"></div>
+          </div>
+        </div>
 
-                <div class="logo-wrapper">
-                    <img
-                        src="logo.jpg"
-                        alt="Kholioo Logo"
-                        class="logo"
-                    >
-                </div>
+        <button id="logoutBtn" class="logout-btn">
+          <span>↪</span>
+          Logout
+        </button>
+      </header>
 
-                <div>
-                    <div class="brand-name">
-                        Kholioo
-                    </div>
+      <!-- MAIN -->
 
-                    <div
-                        class="brand-user"
-                        id="brandUser"
-                    >
-                    </div>
-                </div>
-
-            </div>
-
-
-            <button
-                id="logoutBtn"
-                class="logout-btn"
-            >
-                <span>↪</span>
-                Logout
-            </button>
-
-        </header>
-
-
-        <!-- MAIN -->
-
-        <main class="main-container">
-
-            <!-- =================================================
+      <main class="main-container">
+        <!-- =================================================
                  VERSE HERO
             ================================================== -->
 
-            <section class="verse-card">
+        <section class="verse-card">
+          <div class="verse-decoration decoration-one">✦</div>
 
-                <div class="verse-decoration decoration-one">
-                    ✦
-                </div>
+          <div class="verse-decoration decoration-two">✧</div>
 
-                <div class="verse-decoration decoration-two">
-                    ✧
-                </div>
+          <div class="verse-small">بِسْمِ اللَّهِ الرَّحْمَنِ الرَّحِيمِ</div>
 
-                <div class="verse-small">
-                    بِسْمِ اللَّهِ الرَّحْمَنِ الرَّحِيمِ
-                </div>
+          <div class="verse-line"></div>
 
-                <div class="verse-line"></div>
+          <div class="verse-text">
+            ﴿ وَأَنْ لَيْسَ لِلْإِنْسَانِ إِلَّا مَا سَعَى ۝ وَأَنَّ سَعْيَهُ
+            سَوْفَ يُرَى ۝ ﴾
+          </div>
 
-                <div class="verse-text">
-                    ﴿ وَأَنْ لَيْسَ لِلْإِنْسَانِ إِلَّا مَا سَعَى ۝
-                    وَأَنَّ سَعْيَهُ سَوْفَ يُرَى ۝ ﴾
-                </div>
+          <div class="verse-source">سورة النجم — 39–40</div>
+        </section>
 
-                <div class="verse-source">
-                    سورة النجم — 39–40
-                </div>
-
-            </section>
-
-
-            <!-- =================================================
+        <!-- =================================================
                  STATS
             ================================================== -->
 
-            <section class="stats-grid">
+        <section class="stats-grid">
+          <div class="stat-card">
+            <div class="stat-icon purple-icon">📋</div>
 
-                <div class="stat-card">
+            <div class="stat-info">
+              <p>Total Tasks</p>
+              <h2 id="totalTasks">0</h2>
+            </div>
+          </div>
 
-                    <div class="stat-icon purple-icon">
-                        📋
-                    </div>
+          <div class="stat-card">
+            <div class="stat-icon green-icon">✓</div>
 
-                    <div class="stat-info">
-                        <p>Total Tasks</p>
-                        <h2 id="totalTasks">0</h2>
-                    </div>
+            <div class="stat-info">
+              <p>Completed</p>
+              <h2 id="completedTasks">0</h2>
+            </div>
+          </div>
 
-                </div>
+          <div class="stat-card">
+            <div class="stat-icon orange-icon">⌛</div>
 
+            <div class="stat-info">
+              <p>Remaining</p>
+              <h2 id="remainingTasks">0</h2>
+            </div>
+          </div>
 
-                <div class="stat-card">
+          <div class="stat-card">
+            <div class="stat-icon blue-icon">%</div>
 
-                    <div class="stat-icon green-icon">
-                        ✓
-                    </div>
+            <div class="stat-info">
+              <p>Today's Progress</p>
+              <h2 id="progress">0%</h2>
+            </div>
+          </div>
+        </section>
 
-                    <div class="stat-info">
-                        <p>Completed</p>
-                        <h2 id="completedTasks">0</h2>
-                    </div>
-
-                </div>
-
-
-                <div class="stat-card">
-
-                    <div class="stat-icon orange-icon">
-                        ⌛
-                    </div>
-
-                    <div class="stat-info">
-                        <p>Remaining</p>
-                        <h2 id="remainingTasks">0</h2>
-                    </div>
-
-                </div>
-
-
-                <div class="stat-card">
-
-                    <div class="stat-icon blue-icon">
-                        %
-                    </div>
-
-                    <div class="stat-info">
-                        <p>Today's Progress</p>
-                        <h2 id="progress">0%</h2>
-                    </div>
-
-                </div>
-
-            </section>
-
-
-            <!-- =================================================
+        <!-- =================================================
                  DASHBOARD GRID
             ================================================== -->
 
-            <div class="dashboard-grid">
-
-
-                <!-- =============================================
+        <div class="dashboard-grid">
+          <!-- =============================================
                      TASKS
                 ============================================== -->
 
-                <section class="tasks-section">
+          <section class="tasks-section">
+            <div class="tasks-header">
+              <div>
+                <span class="section-label"> TODAY </span>
 
-                    <div class="tasks-header">
+                <h2>Today's Tasks</h2>
 
-                        <div>
-                            <span class="section-label">
-                                TODAY
-                            </span>
+                <p id="taskDate">Today</p>
+              </div>
 
-                            <h2>
-                                Today's Tasks
-                            </h2>
+              <button id="openTaskModal" class="add-task-btn">
+                <span class="plus">+</span>
+                Add Task
+              </button>
+            </div>
 
-                            <p id="taskDate">
-                                Today
-                            </p>
-                        </div>
+            <div id="taskList" class="task-list"></div>
 
-                        <button
-                            id="openTaskModal"
-                            class="add-task-btn"
-                        >
-                            <span class="plus">+</span>
-                            Add Task
-                        </button>
+            <div id="emptyState" class="empty-state">
+              <div class="empty-icon">📝</div>
 
-                    </div>
+              <h3>No tasks yet</h3>
 
+              <p>Add your first task and start your day.</p>
 
-                    <div
-                        id="taskList"
-                        class="task-list"
-                    ></div>
+              <button id="emptyAddTask" class="empty-add-btn">
+                + Add Your First Task
+              </button>
+            </div>
+          </section>
 
-
-                    <div
-                        id="emptyState"
-                        class="empty-state"
-                    >
-
-                        <div class="empty-icon">
-                            📝
-                        </div>
-
-                        <h3>
-                            No tasks yet
-                        </h3>
-
-                        <p>
-                            Add your first task and start your day.
-                        </p>
-
-                        <button
-                            id="emptyAddTask"
-                            class="empty-add-btn"
-                        >
-                            + Add Your First Task
-                        </button>
-
-                    </div>
-
-                </section>
-
-
-                <!-- =============================================
+          <!-- =============================================
                      WEEKLY PERFORMANCE
                 ============================================== -->
 
-                <aside class="performance-card">
+          <aside class="performance-card">
+            <div class="performance-header">
+              <div>
+                <span class="section-label"> THIS WEEK </span>
 
-                    <div class="performance-header">
+                <h2>Performance</h2>
+              </div>
 
-                        <div>
-                            <span class="section-label">
-                                THIS WEEK
-                            </span>
-
-                            <h2>
-                                Performance
-                            </h2>
-                        </div>
-
-                        <div class="performance-calendar">
-                            📊
-                        </div>
-
-                    </div>
-
-
-                    <!-- Main Gauge -->
-
-                    <div class="main-gauge">
-
-                        <svg
-                            viewBox="0 0 220 220"
-                            class="gauge-svg"
-                        >
-
-                            <circle
-                                cx="110"
-                                cy="110"
-                                r="86"
-                                class="gauge-track"
-                            ></circle>
-
-                            <circle
-                                cx="110"
-                                cy="110"
-                                r="86"
-                                class="gauge-progress"
-                                id="weeklyGauge"
-                            ></circle>
-
-                        </svg>
-
-
-                        <div class="gauge-center">
-
-                            <strong id="weeklyPercent">
-                                0%
-                            </strong>
-
-                            <span>
-                                Completion
-                            </span>
-
-                        </div>
-
-                    </div>
-
-
-                    <!-- Weekly Metrics -->
-
-                    <div class="weekly-metrics">
-
-
-                        <div class="metric">
-
-                            <div class="metric-icon purple-icon">
-                                ✓
-                            </div>
-
-                            <div>
-                                <span>
-                                    Completed
-                                </span>
-
-                                <strong id="weeklyCompleted">
-                                    0
-                                </strong>
-                            </div>
-
-                        </div>
-
-
-                        <div class="metric">
-
-                            <div class="metric-icon green-icon">
-                                ●
-                            </div>
-
-                            <div>
-                                <span>
-                                    Active Days
-                                </span>
-
-                                <strong id="activeDays">
-                                    0 / 7
-                                </strong>
-                            </div>
-
-                        </div>
-
-
-                        <div class="metric">
-
-                            <div class="metric-icon orange-icon">
-                                ★
-                            </div>
-
-                            <div>
-                                <span>
-                                    Best Day
-                                </span>
-
-                                <strong id="bestDay">
-                                    —
-                                </strong>
-                            </div>
-
-                        </div>
-
-                    </div>
-
-
-                    <!-- Weekly mini chart -->
-
-                    <div class="week-chart">
-
-                        <div class="chart-title">
-                            <span>Weekly Activity</span>
-                            <span id="weekTotal">0 tasks</span>
-                        </div>
-
-                        <div
-                            id="weekBars"
-                            class="week-bars"
-                        ></div>
-
-                    </div>
-
-                </aside>
-
+              <div class="performance-calendar">📊</div>
             </div>
 
+            <!-- Main Gauge -->
 
-            <!-- =================================================
+            <div class="main-gauge">
+              <svg viewBox="0 0 220 220" class="gauge-svg">
+                <circle cx="110" cy="110" r="86" class="gauge-track"></circle>
+
+                <circle
+                  cx="110"
+                  cy="110"
+                  r="86"
+                  class="gauge-progress"
+                  id="weeklyGauge"
+                ></circle>
+              </svg>
+
+              <div class="gauge-center">
+                <strong id="weeklyPercent"> 0% </strong>
+
+                <span> Completion </span>
+              </div>
+            </div>
+
+            <!-- Weekly Metrics -->
+
+            <div class="weekly-metrics">
+              <div class="metric">
+                <div class="metric-icon purple-icon">✓</div>
+
+                <div>
+                  <span> Completed </span>
+
+                  <strong id="weeklyCompleted"> 0 </strong>
+                </div>
+              </div>
+
+              <div class="metric">
+                <div class="metric-icon green-icon">●</div>
+
+                <div>
+                  <span> Active Days </span>
+
+                  <strong id="activeDays"> 0 / 7 </strong>
+                </div>
+              </div>
+
+              <div class="metric">
+                <div class="metric-icon orange-icon">★</div>
+
+                <div>
+                  <span> Best Day </span>
+
+                  <strong id="bestDay"> — </strong>
+                </div>
+              </div>
+            </div>
+
+            <!-- Weekly mini chart -->
+
+            <div class="week-chart">
+              <div class="chart-title">
+                <span>Weekly Activity</span>
+                <span id="weekTotal">0 tasks</span>
+              </div>
+
+              <div id="weekBars" class="week-bars"></div>
+            </div>
+          </aside>
+        </div>
+
+        <!-- =================================================
+                 LATE STUDY TASKS
+            ================================================== -->
+
+        <section class="late-study-section" aria-labelledby="lateStudyTitle">
+          <div class="late-study-header">
+            <div>
+              <span class="section-label">UNIVERSITY</span>
+              <h2 id="lateStudyTitle">Late Study Tasks</h2>
+              <p>Track overdue lectures and sections by subject.</p>
+            </div>
+
+            <form id="lateSubjectForm" class="late-subject-form">
+              <label class="visually-hidden" for="lateSubjectName"
+                >Subject name</label
+              >
+              <input
+                id="lateSubjectName"
+                name="subjectName"
+                type="text"
+                maxlength="100"
+                placeholder="Subject name"
+                required
+              />
+              <button type="submit" class="late-add-subject-btn">
+                <span aria-hidden="true">+</span>
+                Add Subject
+              </button>
+            </form>
+          </div>
+
+          <div id="lateSubjectList" class="late-subject-list"></div>
+
+          <div id="lateSubjectEmpty" class="late-empty-state">
+            <div class="late-empty-mark" aria-hidden="true">+</div>
+            <h3>No study subjects yet</h3>
+            <p>Add a subject to start organizing overdue material.</p>
+          </div>
+        </section>
+
+        <!-- =================================================
                  BOTTOM ACTIONS
             ================================================== -->
 
-            <section class="bottom-actions">
+        <section class="bottom-actions">
+          <button id="historyBtn" class="secondary-action">
+            <span>◷</span>
+            Task History
+          </button>
 
-                <button
-                    id="historyBtn"
-                    class="secondary-action"
-                >
-                    <span>◷</span>
-                    Task History
-                </button>
-
-                <button
-                    id="lockBtn"
-                    class="secondary-action"
-                >
-                    <span>🔒</span>
-                    Lock App
-                </button>
-
-            </section>
-
-        </main>
-
+          <button id="lockBtn" class="secondary-action">
+            <span>🔒</span>
+            Lock App
+          </button>
+        </section>
+      </main>
     </div>
-
 
     <!-- =====================================================
          TASK MODAL
     ====================================================== -->
 
-    <div
-        id="taskModal"
-        class="modal-overlay"
-    >
+    <div id="taskModal" class="modal-overlay">
+      <div class="task-modal">
+        <div class="modal-header">
+          <div>
+            <span class="modal-eyebrow" id="modalBrand">YOUR SPACE</span>
 
-        <div class="task-modal">
+            <h2 id="modalTitle">Add New Task</h2>
+          </div>
 
-            <div class="modal-header">
-
-                <div>
-                    <span class="modal-eyebrow">
-                        KHOLIOO
-                    </span>
-
-                    <h2 id="modalTitle">
-                        Add New Task
-                    </h2>
-                </div>
-
-                <button
-                    id="closeTaskModal"
-                    class="modal-close"
-                >
-                    ×
-                </button>
-
-            </div>
-
-
-            <form id="taskForm">
-
-                <div class="form-group">
-
-                    <label for="taskName">
-                        Task name
-                    </label>
-
-                    <input
-                        id="taskName"
-                        type="text"
-                        placeholder="What do you need to do?"
-                        required
-                    >
-
-                </div>
-
-
-                <div class="form-group">
-
-                    <label for="taskDescription">
-                        Description
-                    </label>
-
-                    <textarea
-                        id="taskDescription"
-                        placeholder="Add some details..."
-                        rows="3"
-                    ></textarea>
-
-                </div>
-
-
-                <div class="form-row">
-
-                    <div class="form-group">
-
-                        <label for="taskPriority">
-                            Priority
-                        </label>
-
-                        <select id="taskPriority">
-
-                            <option value="low">
-                                Low
-                            </option>
-
-                            <option
-                                value="medium"
-                                selected
-                            >
-                                Medium
-                            </option>
-
-                            <option value="high">
-                                High
-                            </option>
-
-                        </select>
-
-                    </div>
-
-
-                    <div class="form-group">
-
-                        <label for="taskTime">
-                            Time
-                        </label>
-
-                        <input
-                            id="taskTime"
-                            type="time"
-                        >
-
-                    </div>
-
-                </div>
-
-
-                <div class="modal-actions">
-
-                    <button
-                        type="button"
-                        id="cancelTask"
-                        class="cancel-btn"
-                    >
-                        Cancel
-                    </button>
-
-                    <button
-                        type="submit"
-                        id="saveTaskBtn"
-                        class="save-btn"
-                    >
-                        Add Task
-                    </button>
-
-                </div>
-
-            </form>
-
+          <button id="closeTaskModal" class="modal-close">×</button>
         </div>
 
-    </div>
+        <form id="taskForm">
+          <div class="form-group">
+            <label for="taskName"> Task name </label>
 
+            <input
+              id="taskName"
+              type="text"
+              placeholder="What do you need to do?"
+              required
+            />
+          </div>
+
+          <div class="form-group">
+            <label for="taskDescription"> Description </label>
+
+            <textarea
+              id="taskDescription"
+              placeholder="Add some details..."
+              rows="3"
+            ></textarea>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label for="taskPriority"> Priority </label>
+
+              <select id="taskPriority">
+                <option value="low">Low</option>
+
+                <option value="medium" selected>Medium</option>
+
+                <option value="high">High</option>
+              </select>
+            </div>
+
+            <div class="form-group">
+              <label for="taskTime"> Time </label>
+
+              <input id="taskTime" type="time" />
+            </div>
+          </div>
+
+          <div class="modal-actions">
+            <button type="button" id="cancelTask" class="cancel-btn">
+              Cancel
+            </button>
+
+            <button type="submit" id="saveTaskBtn" class="save-btn">
+              Add Task
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
 
     <!-- =====================================================
          HISTORY MODAL
     ====================================================== -->
 
-    <div
-        id="historyOverlay"
-        class="history-overlay"
-    >
+    <div id="historyOverlay" class="history-overlay">
+      <div class="history-modal">
+        <div class="history-header">
+          <div>
+            <span class="modal-eyebrow"> YOUR JOURNEY </span>
 
-        <div class="history-modal">
+            <h2>Task History</h2>
+          </div>
 
-            <div class="history-header">
-
-                <div>
-                    <span class="modal-eyebrow">
-                        YOUR JOURNEY
-                    </span>
-
-                    <h2>
-                        Task History
-                    </h2>
-                </div>
-
-                <button
-                    id="closeHistory"
-                    class="modal-close"
-                >
-                    ×
-                </button>
-
-            </div>
-
-
-            <div class="history-layout">
-
-                <div class="history-days">
-
-                    <div class="history-column-title">
-                        Previous Days
-                    </div>
-
-                    <div
-                        id="historyList"
-                        class="history-list"
-                    ></div>
-
-                </div>
-
-
-                <div
-                    id="historyDetails"
-                    class="history-details"
-                >
-
-                    <div class="history-placeholder">
-
-                        <div class="details-icon">
-                            📅
-                        </div>
-
-                        <h3>
-                            Select a day
-                        </h3>
-
-                        <p>
-                            Choose a previous day to see its tasks.
-                        </p>
-
-                    </div>
-
-                </div>
-
-            </div>
-
+          <button id="closeHistory" class="modal-close">×</button>
         </div>
 
+        <div class="history-layout">
+          <div class="history-days">
+            <div class="history-column-title">Previous Days</div>
+
+            <div id="historyList" class="history-list"></div>
+          </div>
+
+          <div id="historyDetails" class="history-details">
+            <div class="history-placeholder">
+              <div class="details-icon">📅</div>
+
+              <h3>Select a day</h3>
+
+              <p>Choose a previous day to see its tasks.</p>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
 
-
     <script src="app.js"></script>
-
-</body>
-
+  </body>
 </html>

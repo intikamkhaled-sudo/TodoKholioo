@@ -3,7 +3,6 @@
    PERSONAL PRODUCTIVITY APP
 ========================================================= */
 
-
 /* =========================================================
    CONFIG
 ========================================================= */
@@ -13,7 +12,6 @@ const STORAGE_KEY = "kholioo_secure_data_v2";
 const ITERATIONS = 150000;
 
 const VERIFIER_TEXT = "KHOLIOO_PRIVATE_SPACE";
-
 
 /* =========================================================
    STATE
@@ -28,1144 +26,1006 @@ let editingTaskId = null;
 let selectedHistoryDate = null;
 
 let appData = {
-    tasksByDate: {}
+  tasksByDate: {},
 };
-
 
 /* =========================================================
    DOM
 ========================================================= */
 
-const authScreen =
-    document.getElementById("authScreen");
+const authScreen = document.getElementById("authScreen");
 
-const app =
-    document.getElementById("app");
+const app = document.getElementById("app");
 
-const authForm =
-    document.getElementById("authForm");
+const authForm = document.getElementById("authForm");
 
-const usernameInput =
-    document.getElementById("username");
+const usernameInput = document.getElementById("username");
 
-const passwordInput =
-    document.getElementById("password");
+const passwordInput = document.getElementById("password");
 
-const authSubtitle =
-    document.getElementById("authSubtitle");
+const authSubtitle = document.getElementById("authSubtitle");
 
-const authSubmit =
-    document.getElementById("authSubmit");
+const authSubmit = document.getElementById("authSubmit");
 
-const authError =
-    document.getElementById("authError");
+const authError = document.getElementById("authError");
 
-const togglePassword =
-    document.getElementById("togglePassword");
+const togglePassword = document.getElementById("togglePassword");
 
-const brandUser =
-    document.getElementById("brandUser");
+const brandUser = document.getElementById("brandUser");
 
-const logoutBtn =
-    document.getElementById("logoutBtn");
+const logoutBtn = document.getElementById("logoutBtn");
 
-const lockBtn =
-    document.getElementById("lockBtn");
+const lockBtn = document.getElementById("lockBtn");
 
-const openTaskModal =
-    document.getElementById("openTaskModal");
+const openTaskModal = document.getElementById("openTaskModal");
 
-const emptyAddTask =
-    document.getElementById("emptyAddTask");
+const emptyAddTask = document.getElementById("emptyAddTask");
 
-const taskModal =
-    document.getElementById("taskModal");
+const taskModal = document.getElementById("taskModal");
 
-const closeTaskModal =
-    document.getElementById("closeTaskModal");
+const closeTaskModal = document.getElementById("closeTaskModal");
 
-const cancelTask =
-    document.getElementById("cancelTask");
+const cancelTask = document.getElementById("cancelTask");
 
-const taskForm =
-    document.getElementById("taskForm");
+const taskForm = document.getElementById("taskForm");
 
-const taskName =
-    document.getElementById("taskName");
+const taskName = document.getElementById("taskName");
 
-const taskDescription =
-    document.getElementById("taskDescription");
+const taskDescription = document.getElementById("taskDescription");
 
-const taskPriority =
-    document.getElementById("taskPriority");
+const taskPriority = document.getElementById("taskPriority");
 
-const taskTime =
-    document.getElementById("taskTime");
+const taskTime = document.getElementById("taskTime");
 
-const modalTitle =
-    document.getElementById("modalTitle");
+const modalTitle = document.getElementById("modalTitle");
 
-const saveTaskBtn =
-    document.getElementById("saveTaskBtn");
+const saveTaskBtn = document.getElementById("saveTaskBtn");
 
-const taskList =
-    document.getElementById("taskList");
+const taskList = document.getElementById("taskList");
 
-const emptyState =
-    document.getElementById("emptyState");
+const emptyState = document.getElementById("emptyState");
 
-const totalTasks =
-    document.getElementById("totalTasks");
+const totalTasks = document.getElementById("totalTasks");
 
-const completedTasks =
-    document.getElementById("completedTasks");
+const completedTasks = document.getElementById("completedTasks");
 
-const remainingTasks =
-    document.getElementById("remainingTasks");
+const remainingTasks = document.getElementById("remainingTasks");
 
-const progress =
-    document.getElementById("progress");
+const progress = document.getElementById("progress");
 
-const taskDate =
-    document.getElementById("taskDate");
+const taskDate = document.getElementById("taskDate");
 
-const historyBtn =
-    document.getElementById("historyBtn");
+const historyBtn = document.getElementById("historyBtn");
 
-const historyOverlay =
-    document.getElementById("historyOverlay");
+const historyOverlay = document.getElementById("historyOverlay");
 
-const closeHistory =
-    document.getElementById("closeHistory");
+const closeHistory = document.getElementById("closeHistory");
 
-const historyList =
-    document.getElementById("historyList");
+const historyList = document.getElementById("historyList");
 
-const historyDetails =
-    document.getElementById("historyDetails");
+const historyDetails = document.getElementById("historyDetails");
 
-const weeklyGauge =
-    document.getElementById("weeklyGauge");
+const weeklyGauge = document.getElementById("weeklyGauge");
 
-const weeklyPercent =
-    document.getElementById("weeklyPercent");
+const weeklyPercent = document.getElementById("weeklyPercent");
 
-const weeklyCompleted =
-    document.getElementById("weeklyCompleted");
+const weeklyCompleted = document.getElementById("weeklyCompleted");
 
-const activeDays =
-    document.getElementById("activeDays");
+const activeDays = document.getElementById("activeDays");
 
-const bestDay =
-    document.getElementById("bestDay");
+const bestDay = document.getElementById("bestDay");
 
-const weekBars =
-    document.getElementById("weekBars");
+const weekBars = document.getElementById("weekBars");
 
-const weekTotal =
-    document.getElementById("weekTotal");
+const weekTotal = document.getElementById("weekTotal");
 
+const lateSubjectForm = document.getElementById("lateSubjectForm");
+
+const lateSubjectName = document.getElementById("lateSubjectName");
+
+const lateSubjectList = document.getElementById("lateSubjectList");
+
+const lateSubjectEmpty = document.getElementById("lateSubjectEmpty");
 
 /* =========================================================
    UTILS
 ========================================================= */
 
 function getTodayKey() {
+  const now = new Date();
 
-    const now = new Date();
+  const year = now.getFullYear();
 
-    const year =
-        now.getFullYear();
+  const month = String(now.getMonth() + 1).padStart(2, "0");
 
-    const month =
-        String(now.getMonth() + 1)
-            .padStart(2, "0");
+  const day = String(now.getDate()).padStart(2, "0");
 
-    const day =
-        String(now.getDate())
-            .padStart(2, "0");
-
-    return `${year}-${month}-${day}`;
+  return `${year}-${month}-${day}`;
 }
-
 
 function getDateFromKey(key) {
+  const [year, month, day] = key.split("-").map(Number);
 
-    const [year, month, day] =
-        key.split("-").map(Number);
-
-    return new Date(
-        year,
-        month - 1,
-        day
-    );
+  return new Date(year, month - 1, day);
 }
-
 
 function formatDate(key) {
+  const date = getDateFromKey(key);
 
-    const date =
-        getDateFromKey(key);
-
-    return date.toLocaleDateString(
-        "en-US",
-        {
-            weekday: "long",
-            month: "short",
-            day: "numeric",
-            year: "numeric"
-        }
-    );
+  return date.toLocaleDateString("en-US", {
+    weekday: "long",
+    month: "short",
+    day: "numeric",
+    year: "numeric",
+  });
 }
-
 
 function escapeHTML(value) {
-
-    return String(value ?? "")
-        .replaceAll("&", "&amp;")
-        .replaceAll("<", "&lt;")
-        .replaceAll(">", "&gt;")
-        .replaceAll('"', "&quot;")
-        .replaceAll("'", "&#039;");
+  return String(value ?? "")
+    .replaceAll("&", "&amp;")
+    .replaceAll("<", "&lt;")
+    .replaceAll(">", "&gt;")
+    .replaceAll('"', "&quot;")
+    .replaceAll("'", "&#039;");
 }
-
 
 function generateId() {
-
-    return (
-        Date.now().toString(36) +
-        Math.random()
-            .toString(36)
-            .slice(2)
-    );
+  return Date.now().toString(36) + Math.random().toString(36).slice(2);
 }
-
 
 /* =========================================================
    CRYPTO
 ========================================================= */
 
 function bufferToBase64(buffer) {
+  const bytes = new Uint8Array(buffer);
 
-    const bytes =
-        new Uint8Array(buffer);
+  let binary = "";
 
-    let binary = "";
+  const chunkSize = 0x8000;
 
-    const chunkSize = 0x8000;
+  for (let i = 0; i < bytes.length; i += chunkSize) {
+    binary += String.fromCharCode(
+      ...bytes.subarray(i, Math.min(i + chunkSize, bytes.length)),
+    );
+  }
 
-    for (
-        let i = 0;
-        i < bytes.length;
-        i += chunkSize
-    ) {
-
-        binary += String.fromCharCode(
-            ...bytes.subarray(
-                i,
-                Math.min(
-                    i + chunkSize,
-                    bytes.length
-                )
-            )
-        );
-    }
-
-    return btoa(binary);
+  return btoa(binary);
 }
-
 
 function base64ToBuffer(base64) {
+  const binary = atob(base64);
 
-    const binary =
-        atob(base64);
+  const bytes = new Uint8Array(binary.length);
 
-    const bytes =
-        new Uint8Array(
-            binary.length
-        );
+  for (let i = 0; i < binary.length; i++) {
+    bytes[i] = binary.charCodeAt(i);
+  }
 
-    for (
-        let i = 0;
-        i < binary.length;
-        i++
-    ) {
-
-        bytes[i] =
-            binary.charCodeAt(i);
-    }
-
-    return bytes.buffer;
+  return bytes.buffer;
 }
 
+async function deriveKey(password, salt) {
+  const encoder = new TextEncoder();
 
-async function deriveKey(
-    password,
-    salt
-) {
+  const material = await crypto.subtle.importKey(
+    "raw",
+    encoder.encode(password),
+    "PBKDF2",
+    false,
+    ["deriveKey"],
+  );
 
-    const encoder =
-        new TextEncoder();
-
-    const material =
-        await crypto.subtle.importKey(
-            "raw",
-            encoder.encode(password),
-            "PBKDF2",
-            false,
-            ["deriveKey"]
-        );
-
-    return crypto.subtle.deriveKey(
-        {
-            name: "PBKDF2",
-            salt,
-            iterations: ITERATIONS,
-            hash: "SHA-256"
-        },
-        material,
-        {
-            name: "AES-GCM",
-            length: 256
-        },
-        false,
-        [
-            "encrypt",
-            "decrypt"
-        ]
-    );
+  return crypto.subtle.deriveKey(
+    {
+      name: "PBKDF2",
+      salt,
+      iterations: ITERATIONS,
+      hash: "SHA-256",
+    },
+    material,
+    {
+      name: "AES-GCM",
+      length: 256,
+    },
+    false,
+    ["encrypt", "decrypt"],
+  );
 }
 
+async function encryptData(data, key) {
+  const encoder = new TextEncoder();
 
-async function encryptData(
-    data,
-    key
-) {
+  const iv = crypto.getRandomValues(new Uint8Array(12));
 
-    const encoder =
-        new TextEncoder();
+  const encoded = encoder.encode(JSON.stringify(data));
 
-    const iv =
-        crypto.getRandomValues(
-            new Uint8Array(12)
-        );
+  const encrypted = await crypto.subtle.encrypt(
+    {
+      name: "AES-GCM",
+      iv,
+    },
+    key,
+    encoded,
+  );
 
-    const encoded =
-        encoder.encode(
-            JSON.stringify(data)
-        );
-
-    const encrypted =
-        await crypto.subtle.encrypt(
-            {
-                name: "AES-GCM",
-                iv
-            },
-            key,
-            encoded
-        );
-
-    return {
-        iv: bufferToBase64(iv),
-        data: bufferToBase64(encrypted)
-    };
+  return {
+    iv: bufferToBase64(iv),
+    data: bufferToBase64(encrypted),
+  };
 }
 
+async function decryptData(encryptedObject, key) {
+  const decoder = new TextDecoder();
 
-async function decryptData(
-    encryptedObject,
-    key
-) {
+  const iv = new Uint8Array(base64ToBuffer(encryptedObject.iv));
 
-    const decoder =
-        new TextDecoder();
+  const encrypted = base64ToBuffer(encryptedObject.data);
 
-    const iv =
-        new Uint8Array(
-            base64ToBuffer(
-                encryptedObject.iv
-            )
-        );
+  const decrypted = await crypto.subtle.decrypt(
+    {
+      name: "AES-GCM",
+      iv,
+    },
+    key,
+    encrypted,
+  );
 
-    const encrypted =
-        base64ToBuffer(
-            encryptedObject.data
-        );
-
-    const decrypted =
-        await crypto.subtle.decrypt(
-            {
-                name: "AES-GCM",
-                iv
-            },
-            key,
-            encrypted
-        );
-
-    return JSON.parse(
-        decoder.decode(decrypted)
-    );
+  return JSON.parse(decoder.decode(decrypted));
 }
-
 
 /* =========================================================
    STORAGE
 ========================================================= */
 
 function getStoredData() {
+  const raw = localStorage.getItem(STORAGE_KEY);
 
-    const raw =
-        localStorage.getItem(
-            STORAGE_KEY
-        );
+  if (!raw) {
+    return null;
+  }
 
-    if (!raw) {
-        return null;
-    }
-
-    try {
-
-        return JSON.parse(raw);
-
-    } catch {
-
-        return null;
-
-    }
+  try {
+    return JSON.parse(raw);
+  } catch {
+    return null;
+  }
 }
-
 
 async function saveSecureData() {
+  if (!encryptionKey) {
+    return;
+  }
 
-    if (!encryptionKey) {
-        return;
-    }
+  const encrypted = await encryptData(appData, encryptionKey);
 
-    const encrypted =
-        await encryptData(
-            appData,
-            encryptionKey
-        );
+  const stored = getStoredData();
 
-    const stored =
-        getStoredData();
+  const payload = {
+    version: 2,
 
-    const payload = {
+    username: currentUser,
 
-        version: 2,
+    salt: stored?.salt || "",
 
-        username: currentUser,
+    verifier: stored?.verifier || "",
 
-        salt: stored?.salt || "",
+    encrypted,
+  };
 
-        verifier: stored?.verifier || "",
-
-        encrypted
-
-    };
-
-    localStorage.setItem(
-        STORAGE_KEY,
-        JSON.stringify(payload)
-    );
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(payload));
 }
-
 
 /* =========================================================
    CREATE ACCOUNT
 ========================================================= */
 
-async function createAccount(
-    username,
-    password
-) {
+async function createAccount(username, password) {
+  const salt = crypto.getRandomValues(new Uint8Array(16));
 
-    const salt =
-        crypto.getRandomValues(
-            new Uint8Array(16)
-        );
+  const key = await deriveKey(password, salt);
 
-    const key =
-        await deriveKey(
-            password,
-            salt
-        );
+  const verifier = await encryptData(
+    {
+      value: VERIFIER_TEXT,
+    },
+    key,
+  );
 
-    const verifier =
-        await encryptData(
-            {
-                value:
-                    VERIFIER_TEXT
-            },
-            key
-        );
+  const encrypted = await encryptData(
+    {
+      tasksByDate: {},
+    },
+    key,
+  );
 
-    const encrypted =
-        await encryptData(
-            {
-                tasksByDate: {}
-            },
-            key
-        );
+  localStorage.setItem(
+    STORAGE_KEY,
+    JSON.stringify({
+      version: 2,
 
-    localStorage.setItem(
-        STORAGE_KEY,
-        JSON.stringify({
+      username,
 
-            version: 2,
+      salt: bufferToBase64(salt),
 
-            username,
+      verifier,
 
-            salt:
-                bufferToBase64(salt),
+      encrypted,
+    }),
+  );
 
-            verifier,
+  encryptionKey = key;
 
-            encrypted
+  currentUser = username;
 
-        })
-    );
+  appData = {
+    tasksByDate: {},
+  };
 
-    encryptionKey = key;
-
-    currentUser = username;
-
-    appData = {
-        tasksByDate: {}
-    };
-
-    showApp();
+  showApp();
 }
-
 
 /* =========================================================
    LOGIN
 ========================================================= */
 
-async function login(
-    username,
-    password
-) {
+async function login(username, password) {
+  const stored = getStoredData();
 
-    const stored =
-        getStoredData();
+  if (!stored) {
+    await createAccount(username, password);
 
-    if (!stored) {
+    return;
+  }
 
-        await createAccount(
-            username,
-            password
-        );
+  if (
+    username.trim().toLowerCase() !==
+    String(stored.username).trim().toLowerCase()
+  ) {
+    throw new Error("Incorrect username or password.");
+  }
 
-        return;
+  const salt = new Uint8Array(base64ToBuffer(stored.salt));
 
+  const key = await deriveKey(password, salt);
+
+  try {
+    const verification = await decryptData(stored.verifier, key);
+
+    if (verification.value !== VERIFIER_TEXT) {
+      throw new Error();
     }
 
+    const decrypted = await decryptData(stored.encrypted, key);
 
-    if (
-        username.trim().toLowerCase() !==
-        String(stored.username)
-            .trim()
-            .toLowerCase()
-    ) {
+    encryptionKey = key;
 
-        throw new Error(
-            "Incorrect username or password."
-        );
+    currentUser = stored.username;
 
-    }
+    appData = decrypted || {
+      tasksByDate: {},
+    };
 
-
-    const salt =
-        new Uint8Array(
-            base64ToBuffer(
-                stored.salt
-            )
-        );
-
-    const key =
-        await deriveKey(
-            password,
-            salt
-        );
-
-
-    try {
-
-        const verification =
-            await decryptData(
-                stored.verifier,
-                key
-            );
-
-        if (
-            verification.value !==
-            VERIFIER_TEXT
-        ) {
-
-            throw new Error();
-
-        }
-
-        const decrypted =
-            await decryptData(
-                stored.encrypted,
-                key
-            );
-
-        encryptionKey = key;
-
-        currentUser =
-            stored.username;
-
-        appData =
-            decrypted || {
-                tasksByDate: {}
-            };
-
-        showApp();
-
-    } catch {
-
-        throw new Error(
-            "Incorrect username or password."
-        );
-
-    }
+    showApp();
+  } catch {
+    throw new Error("Incorrect username or password.");
+  }
 }
-
 
 /* =========================================================
    AUTH UI
 ========================================================= */
 
 function updateAuthMode() {
+  const hasAccount = Boolean(localStorage.getItem(STORAGE_KEY));
 
-    const hasAccount =
-        Boolean(
-            localStorage.getItem(
-                STORAGE_KEY
-            )
-        );
+  if (hasAccount) {
+    authSubtitle.textContent = "Welcome back. Unlock your private space.";
 
+    authSubmit.textContent = "Unlock Kholioo";
 
-    if (hasAccount) {
+    usernameInput.value = getStoredData()?.username || "";
+  } else {
+    authSubtitle.textContent = "Create your private productivity space.";
 
-        authSubtitle.textContent =
-            "Welcome back. Unlock your private space.";
-
-        authSubmit.textContent =
-            "Unlock Kholioo";
-
-        usernameInput.value =
-            getStoredData()?.username || "";
-
-    } else {
-
-        authSubtitle.textContent =
-            "Create your private productivity space.";
-
-        authSubmit.textContent =
-            "Create Private Space";
-
-    }
-
+    authSubmit.textContent = "Create Private Space";
+  }
 }
-
 
 function showAuth() {
+  app.classList.add("hidden");
 
-    app.classList.add("hidden");
+  authScreen.classList.remove("hidden");
 
-    authScreen.classList.remove(
-        "hidden"
-    );
+  updateAuthMode();
 
-    updateAuthMode();
+  passwordInput.value = "";
 
-    passwordInput.value = "";
+  authError.textContent = "";
 
-    authError.textContent = "";
-
-    passwordInput.focus();
+  passwordInput.focus();
 }
-
 
 function showApp() {
+  authScreen.classList.add("hidden");
 
-    authScreen.classList.add(
-        "hidden"
-    );
+  app.classList.remove("hidden");
 
-    app.classList.remove(
-        "hidden"
-    );
+  brandUser.textContent = `Private space · ${currentUser}`;
 
-    brandUser.textContent =
-        `Private space · ${currentUser}`;
+  renderToday();
 
-    renderToday();
+  renderLateStudySubjects();
 
-    renderHistory();
+  renderHistory();
 
-    updateWeeklyPerformance();
+  updateWeeklyPerformance();
 }
-
 
 /* =========================================================
    AUTH EVENTS
 ========================================================= */
 
-authForm.addEventListener(
-    "submit",
-    async function (event) {
+authForm.addEventListener("submit", async function (event) {
+  event.preventDefault();
 
-        event.preventDefault();
+  authError.textContent = "";
 
-        authError.textContent = "";
+  const username = usernameInput.value.trim();
 
-        const username =
-            usernameInput.value.trim();
+  const password = passwordInput.value;
 
-        const password =
-            passwordInput.value;
+  if (username.length < 2) {
+    authError.textContent = "Username must be at least 2 characters.";
 
-        if (
-            username.length < 2
-        ) {
+    return;
+  }
 
-            authError.textContent =
-                "Username must be at least 2 characters.";
+  if (password.length < 6) {
+    authError.textContent = "Password must be at least 6 characters.";
 
-            return;
+    return;
+  }
 
-        }
+  authSubmit.disabled = true;
 
-        if (
-            password.length < 6
-        ) {
+  authSubmit.textContent = "Securing your space...";
 
-            authError.textContent =
-                "Password must be at least 6 characters.";
+  try {
+    await login(username, password);
+  } catch (error) {
+    authError.textContent = error.message;
 
-            return;
+    authSubmit.disabled = false;
 
-        }
+    updateAuthMode();
+  }
+});
 
+togglePassword.addEventListener("click", function () {
+  const isPassword = passwordInput.type === "password";
 
-        authSubmit.disabled = true;
+  passwordInput.type = isPassword ? "text" : "password";
 
-        authSubmit.textContent =
-            "Securing your space...";
-
-
-        try {
-
-            await login(
-                username,
-                password
-            );
-
-        } catch (error) {
-
-            authError.textContent =
-                error.message;
-
-            authSubmit.disabled =
-                false;
-
-            updateAuthMode();
-
-        }
-
-    }
-);
-
-
-togglePassword.addEventListener(
-    "click",
-    function () {
-
-        const isPassword =
-            passwordInput.type === "password";
-
-        passwordInput.type =
-            isPassword
-                ? "text"
-                : "password";
-
-        togglePassword.textContent =
-            isPassword
-                ? "Hide"
-                : "Show";
-
-    }
-);
-
+  togglePassword.textContent = isPassword ? "Hide" : "Show";
+});
 
 /* =========================================================
    LOGOUT / LOCK
 ========================================================= */
 
 function lockApp() {
+  encryptionKey = null;
 
-    encryptionKey = null;
+  currentUser = "";
 
-    currentUser = "";
+  app.classList.add("hidden");
 
-    app.classList.add("hidden");
+  authScreen.classList.remove("hidden");
 
-    authScreen.classList.remove(
-        "hidden"
-    );
+  passwordInput.value = "";
 
-    passwordInput.value = "";
+  authError.textContent = "";
 
-    authError.textContent = "";
+  updateAuthMode();
 
-    updateAuthMode();
-
-    passwordInput.focus();
+  passwordInput.focus();
 }
 
+logoutBtn.addEventListener("click", function () {
+  const confirmed = confirm("Lock your private Kholioo space?");
 
-logoutBtn.addEventListener(
-    "click",
-    function () {
+  if (confirmed) {
+    lockApp();
+  }
+});
 
-        const confirmed =
-            confirm(
-                "Lock your private Kholioo space?"
-            );
-
-        if (confirmed) {
-            lockApp();
-        }
-
-    }
-);
-
-
-lockBtn.addEventListener(
-    "click",
-    function () {
-        lockApp();
-    }
-);
-
+lockBtn.addEventListener("click", function () {
+  lockApp();
+});
 
 /* =========================================================
    TASK DATA
 ========================================================= */
 
 function getTodayTasks() {
+  const today = getTodayKey();
 
-    const today =
-        getTodayKey();
+  if (!appData.tasksByDate || typeof appData.tasksByDate !== "object") {
+    appData.tasksByDate = {};
+  }
 
-    if (
-        !Array.isArray(
-            appData.tasksByDate[today]
-        )
-    ) {
+  if (!Array.isArray(appData.tasksByDate[today])) {
+    appData.tasksByDate[today] = [];
+  }
 
-        appData.tasksByDate[today] = [];
-
-    }
-
-    return appData.tasksByDate[today];
+  return appData.tasksByDate[today];
 }
 
+function getLateStudySubjects() {
+  if (!Array.isArray(appData.lateStudySubjects)) {
+    appData.lateStudySubjects = [];
+  }
+
+  appData.lateStudySubjects = appData.lateStudySubjects.filter(
+    (subject) =>
+      subject &&
+      typeof subject.id === "string" &&
+      typeof subject.name === "string",
+  );
+
+  appData.lateStudySubjects.forEach((subject) => {
+    subject.lectures = Array.isArray(subject.lectures) ? subject.lectures : [];
+
+    subject.sections = Array.isArray(subject.sections) ? subject.sections : [];
+  });
+
+  return appData.lateStudySubjects;
+}
 
 async function persist() {
+  await saveSecureData();
 
-    await saveSecureData();
+  updateStats();
 
-    updateStats();
+  updateWeeklyPerformance();
 
-    updateWeeklyPerformance();
-
-    renderHistory();
+  renderHistory();
 }
 
+/* =========================================================
+   LATE STUDY TASKS
+========================================================= */
+
+function renderLateStudySubjects() {
+  const subjects = getLateStudySubjects();
+
+  lateSubjectList.innerHTML = "";
+  lateSubjectEmpty.classList.toggle("hidden", subjects.length > 0);
+
+  subjects.forEach((subject) => {
+    const lectures = subject.lectures;
+    const sections = subject.sections;
+    const allItems = [...lectures, ...sections];
+    const completed = allItems.filter((item) => item.completed).length;
+    const percentage = allItems.length
+      ? Math.round((completed / allItems.length) * 100)
+      : 0;
+    const isComplete = allItems.length > 0 && completed === allItems.length;
+
+    const card = document.createElement("article");
+    card.className = "late-subject-card";
+    card.innerHTML = `
+                <div class="late-subject-top">
+                    <div class="late-subject-heading">
+                        <div class="late-subject-name-row">
+                            <h3>${escapeHTML(subject.name)}</h3>
+                            <span class="late-status ${isComplete ? "is-complete" : ""}">
+                                ${isComplete ? "Completed" : "In progress"}
+                            </span>
+                        </div>
+                        <p>${allItems.length} overdue item${allItems.length === 1 ? "" : "s"}</p>
+                    </div>
+                    <button
+                        type="button"
+                        class="late-edit-button"
+                        data-edit-subject="${escapeHTML(subject.id)}"
+                        aria-label="Edit ${escapeHTML(subject.name)} subject name"
+                    >Edit subject</button>
+                </div>
+
+                <div class="late-progress-row">
+                    <div class="late-progress-track" role="progressbar" aria-label="${escapeHTML(subject.name)} completion" aria-valuemin="0" aria-valuemax="100" aria-valuenow="${percentage}">
+                        <span style="width: ${percentage}%"></span>
+                    </div>
+                    <strong>${percentage}%</strong>
+                </div>
+
+                <div class="late-stat-grid">
+                    <div class="late-stat-block">
+                        <span class="late-stat-heading">Lectures</span>
+                        <span><strong>${lectures.length}</strong> total</span>
+                        <span><strong>${lectures.filter((item) => item.completed).length}</strong> completed</span>
+                        <span class="late-remaining"><strong>${lectures.filter((item) => !item.completed).length}</strong> remaining</span>
+                    </div>
+                    <div class="late-stat-block">
+                        <span class="late-stat-heading">Sections</span>
+                        <span><strong>${sections.length}</strong> total</span>
+                        <span><strong>${sections.filter((item) => item.completed).length}</strong> completed</span>
+                        <span class="late-remaining"><strong>${sections.filter((item) => !item.completed).length}</strong> remaining</span>
+                    </div>
+                </div>
+
+                <div class="late-category-grid">
+                    ${renderLateStudyCategory(subject, "lectures", "Lectures", lectures)}
+                    ${renderLateStudyCategory(subject, "sections", "Sections / Tutorials", sections)}
+                </div>
+            `;
+
+    lateSubjectList.appendChild(card);
+  });
+}
+
+function renderLateStudyCategory(subject, type, title, items) {
+  const itemMarkup = items.length
+    ? items
+        .map(
+          (item) => `
+                <div class="late-study-item ${item.completed ? "is-complete" : ""}">
+                    <input
+                        type="checkbox"
+                        class="late-study-checkbox"
+                        data-late-toggle="true"
+                        data-subject-id="${escapeHTML(subject.id)}"
+                        data-item-type="${type}"
+                        data-item-id="${escapeHTML(item.id)}"
+                        aria-label="Mark ${escapeHTML(item.title)} ${item.completed ? "incomplete" : "complete"}"
+                        ${item.completed ? "checked" : ""}
+                    >
+                    <span class="late-study-item-title">${escapeHTML(item.title)}</span>
+                    <button
+                        type="button"
+                        class="late-item-edit"
+                        data-edit-item="${escapeHTML(item.id)}"
+                        data-subject-id="${escapeHTML(subject.id)}"
+                        data-item-type="${type}"
+                        aria-label="Edit ${escapeHTML(item.title)}"
+                    >Edit</button>
+                </div>
+            `,
+        )
+        .join("")
+    : `<p class="late-category-empty">No ${type} added yet.</p>`;
+
+  const singular = type === "lectures" ? "Lecture" : "Section";
+
+  return `
+        <section class="late-category" aria-label="${title}">
+            <div class="late-category-heading">
+                <h4>${title}</h4>
+                <span>${items.length}</span>
+            </div>
+            <div class="late-study-items">${itemMarkup}</div>
+            <form class="late-item-form" data-subject-id="${escapeHTML(subject.id)}" data-item-type="${type}">
+                <label class="visually-hidden" for="late-${escapeHTML(subject.id)}-${type}">New ${singular.toLowerCase()} name</label>
+                <input
+                    id="late-${escapeHTML(subject.id)}-${type}"
+                    name="itemTitle"
+                    type="text"
+                    maxlength="120"
+                    placeholder="Add ${singular.toLowerCase()} title or number"
+                    required
+                >
+                <button type="submit" aria-label="Add ${singular.toLowerCase()}">+</button>
+            </form>
+        </section>
+    `;
+}
+
+lateSubjectForm.addEventListener("submit", async function (event) {
+  event.preventDefault();
+
+  const name = lateSubjectName.value.trim();
+  if (!name) {
+    return;
+  }
+
+  const subjects = getLateStudySubjects();
+  if (
+    subjects.some(
+      (subject) =>
+        subject.name.toLocaleLowerCase() === name.toLocaleLowerCase(),
+    )
+  ) {
+    alert("A subject with that name already exists.");
+    return;
+  }
+
+  subjects.push({
+    id: generateId(),
+    name,
+    lectures: [],
+    sections: [],
+  });
+
+  await persist();
+  lateSubjectForm.reset();
+  renderLateStudySubjects();
+});
+
+lateSubjectList.addEventListener("submit", async function (event) {
+  const form = event.target.closest(".late-item-form");
+  if (!form) {
+    return;
+  }
+
+  event.preventDefault();
+
+  const nameInput = form.elements.itemTitle;
+  const title = nameInput.value.trim();
+  const { subjectId, itemType } = form.dataset;
+  if (!title || !["lectures", "sections"].includes(itemType)) {
+    return;
+  }
+
+  const subject = getLateStudySubjects().find((item) => item.id === subjectId);
+  if (!subject) {
+    return;
+  }
+
+  const items = subject[itemType];
+  if (
+    items.some(
+      (item) => item.title.toLocaleLowerCase() === title.toLocaleLowerCase(),
+    )
+  ) {
+    alert(
+      `That ${itemType === "lectures" ? "lecture" : "section"} already exists for this subject.`,
+    );
+    return;
+  }
+
+  items.push({
+    id: generateId(),
+    title,
+    completed: false,
+  });
+
+  await persist();
+  renderLateStudySubjects();
+});
+
+lateSubjectList.addEventListener("change", async function (event) {
+  const checkbox = event.target.closest("[data-late-toggle]");
+  if (!checkbox) {
+    return;
+  }
+
+  const { subjectId, itemType, itemId } = checkbox.dataset;
+  const subject = getLateStudySubjects().find((item) => item.id === subjectId);
+  const studyItem = subject?.[itemType]?.find((item) => item.id === itemId);
+  if (!studyItem) {
+    return;
+  }
+
+  studyItem.completed = checkbox.checked;
+  await persist();
+  renderLateStudySubjects();
+});
+
+lateSubjectList.addEventListener("click", async function (event) {
+  const editSubjectButton = event.target.closest("[data-edit-subject]");
+  const editItemButton = event.target.closest("[data-edit-item]");
+
+  if (editSubjectButton) {
+    const subject = getLateStudySubjects().find(
+      (item) => item.id === editSubjectButton.dataset.editSubject,
+    );
+    if (!subject) {
+      return;
+    }
+
+    const name = prompt("Edit subject name:", subject.name)?.trim();
+    if (!name) {
+      return;
+    }
+    if (
+      getLateStudySubjects().some(
+        (item) =>
+          item.id !== subject.id &&
+          item.name.toLocaleLowerCase() === name.toLocaleLowerCase(),
+      )
+    ) {
+      alert("A subject with that name already exists.");
+      return;
+    }
+
+    subject.name = name;
+    await persist();
+    renderLateStudySubjects();
+    return;
+  }
+
+  if (editItemButton) {
+    const { subjectId, itemType, editItem: itemId } = editItemButton.dataset;
+    const subject = getLateStudySubjects().find(
+      (item) => item.id === subjectId,
+    );
+    const studyItem = subject?.[itemType]?.find((item) => item.id === itemId);
+    if (!studyItem) {
+      return;
+    }
+
+    const title = prompt("Edit study item:", studyItem.title)?.trim();
+    if (!title) {
+      return;
+    }
+    if (
+      subject[itemType].some(
+        (item) =>
+          item.id !== studyItem.id &&
+          item.title.toLocaleLowerCase() === title.toLocaleLowerCase(),
+      )
+    ) {
+      alert(
+        `That ${itemType === "lectures" ? "lecture" : "section"} already exists for this subject.`,
+      );
+      return;
+    }
+
+    studyItem.title = title;
+    await persist();
+    renderLateStudySubjects();
+  }
+});
 
 /* =========================================================
    TASK MODAL
 ========================================================= */
 
 function openAddTaskModal() {
+  editingTaskId = null;
 
-    editingTaskId = null;
+  modalTitle.textContent = "Add New Task";
 
-    modalTitle.textContent =
-        "Add New Task";
+  saveTaskBtn.textContent = "Add Task";
 
-    saveTaskBtn.textContent =
-        "Add Task";
+  taskForm.reset();
 
-    taskForm.reset();
+  taskPriority.value = "medium";
 
-    taskPriority.value =
-        "medium";
+  taskModal.classList.add("active");
 
-    taskModal.classList.add(
-        "active"
-    );
-
-    setTimeout(
-        () => taskName.focus(),
-        100
-    );
-
+  setTimeout(() => taskName.focus(), 100);
 }
 
+function openEditTaskModal(taskId) {
+  const tasks = getTodayTasks();
 
-function openEditTaskModal(
-    taskId
-) {
+  const task = tasks.find((item) => item.id === taskId);
 
-    const tasks =
-        getTodayTasks();
+  if (!task) {
+    return;
+  }
 
-    const task =
-        tasks.find(
-            item =>
-                item.id === taskId
-        );
+  editingTaskId = taskId;
 
-    if (!task) {
-        return;
-    }
+  modalTitle.textContent = "Edit Task";
 
+  saveTaskBtn.textContent = "Save Changes";
 
-    editingTaskId =
-        taskId;
+  taskName.value = task.name || "";
 
-    modalTitle.textContent =
-        "Edit Task";
+  taskDescription.value = task.description || "";
 
-    saveTaskBtn.textContent =
-        "Save Changes";
+  taskPriority.value = task.priority || "medium";
 
+  taskTime.value = task.time || "";
 
-    taskName.value =
-        task.name || "";
+  taskModal.classList.add("active");
 
-    taskDescription.value =
-        task.description || "";
-
-    taskPriority.value =
-        task.priority || "medium";
-
-    taskTime.value =
-        task.time || "";
-
-
-    taskModal.classList.add(
-        "active"
-    );
-
-    setTimeout(
-        () => taskName.focus(),
-        100
-    );
-
+  setTimeout(() => taskName.focus(), 100);
 }
-
 
 function closeTaskModalFn() {
+  taskModal.classList.remove("active");
 
-    taskModal.classList.remove(
-        "active"
-    );
+  editingTaskId = null;
 
-    editingTaskId = null;
+  taskForm.reset();
 
-    taskForm.reset();
-
-    taskPriority.value =
-        "medium";
+  taskPriority.value = "medium";
 }
 
+openTaskModal.addEventListener("click", openAddTaskModal);
 
-openTaskModal.addEventListener(
-    "click",
-    openAddTaskModal
-);
+emptyAddTask.addEventListener("click", openAddTaskModal);
 
+closeTaskModal.addEventListener("click", closeTaskModalFn);
 
-emptyAddTask.addEventListener(
-    "click",
-    openAddTaskModal
-);
+cancelTask.addEventListener("click", closeTaskModalFn);
 
-
-closeTaskModal.addEventListener(
-    "click",
-    closeTaskModalFn
-);
-
-
-cancelTask.addEventListener(
-    "click",
-    closeTaskModalFn
-);
-
-
-taskModal.addEventListener(
-    "click",
-    function (event) {
-
-        if (
-            event.target ===
-            taskModal
-        ) {
-
-            closeTaskModalFn();
-
-        }
-
-    }
-);
-
+taskModal.addEventListener("click", function (event) {
+  if (event.target === taskModal) {
+    closeTaskModalFn();
+  }
+});
 
 /* =========================================================
    ADD / EDIT TASK
 ========================================================= */
 
-taskForm.addEventListener(
-    "submit",
-    async function (event) {
+taskForm.addEventListener("submit", async function (event) {
+  event.preventDefault();
 
-        event.preventDefault();
+  const name = taskName.value.trim();
 
+  if (!name) {
+    return;
+  }
 
-        const name =
-            taskName.value.trim();
+  const tasks = getTodayTasks();
 
-        if (!name) {
-            return;
-        }
+  if (editingTaskId) {
+    const task = tasks.find((item) => item.id === editingTaskId);
 
+    if (task) {
+      task.name = name;
 
-        const tasks =
-            getTodayTasks();
+      task.description = taskDescription.value.trim();
 
+      task.priority = taskPriority.value;
 
-        if (editingTaskId) {
-
-            const task =
-                tasks.find(
-                    item =>
-                        item.id ===
-                        editingTaskId
-                );
-
-            if (task) {
-
-                task.name =
-                    name;
-
-                task.description =
-                    taskDescription.value.trim();
-
-                task.priority =
-                    taskPriority.value;
-
-                task.time =
-                    taskTime.value;
-
-            }
-
-        } else {
-
-            tasks.push({
-
-                id:
-                    generateId(),
-
-                name,
-
-                description:
-                    taskDescription.value.trim(),
-
-                priority:
-                    taskPriority.value,
-
-                time:
-                    taskTime.value,
-
-                completed:
-                    false,
-
-                createdAt:
-                    new Date().toISOString()
-
-            });
-
-        }
-
-
-        await persist();
-
-        renderToday();
-
-        closeTaskModalFn();
-
+      task.time = taskTime.value;
     }
-);
+  } else {
+    tasks.push({
+      id: generateId(),
 
+      name,
+
+      description: taskDescription.value.trim(),
+
+      priority: taskPriority.value,
+
+      time: taskTime.value,
+
+      completed: false,
+
+      createdAt: new Date().toISOString(),
+    });
+  }
+
+  await persist();
+
+  renderToday();
+
+  closeTaskModalFn();
+});
 
 /* =========================================================
    RENDER TASKS
 ========================================================= */
 
 function renderToday() {
+  const tasks = getTodayTasks();
 
-    const tasks =
-        getTodayTasks();
+  taskList.innerHTML = "";
 
-    taskList.innerHTML = "";
+  if (tasks.length === 0) {
+    emptyState.style.display = "flex";
+  } else {
+    emptyState.style.display = "none";
+  }
 
+  tasks.forEach((task) => {
+    const card = document.createElement("div");
 
-    if (tasks.length === 0) {
+    card.className = `task-card ${task.completed ? "completed" : ""}`;
 
-        emptyState.style.display =
-            "flex";
+    const timeText = task.time ? formatTime(task.time) : "";
 
-    } else {
-
-        emptyState.style.display =
-            "none";
-
-    }
-
-
-    tasks.forEach(
-        task => {
-
-            const card =
-                document.createElement(
-                    "div"
-                );
-
-            card.className =
-                `task-card ${
-                    task.completed
-                        ? "completed"
-                        : ""
-                }`;
-
-
-            const timeText =
-                task.time
-                    ? formatTime(
-                        task.time
-                    )
-                    : "";
-
-
-            card.innerHTML = `
+    card.innerHTML = `
 
                 <input
                     type="checkbox"
@@ -1181,13 +1041,13 @@ function renderToday() {
                     </div>
 
                     ${
-                        task.description
-                            ? `
+                      task.description
+                        ? `
                             <div class="task-description">
                                 ${escapeHTML(task.description)}
                             </div>
                             `
-                            : ""
+                        : ""
                     }
 
                     <div class="task-meta">
@@ -1199,13 +1059,13 @@ function renderToday() {
                         </span>
 
                         ${
-                            timeText
-                                ? `
+                          timeText
+                            ? `
                                 <span class="task-time">
                                     🕐 ${timeText}
                                 </span>
                                 `
-                                : ""
+                            : ""
                         }
 
                     </div>
@@ -1233,292 +1093,165 @@ function renderToday() {
                 </div>
             `;
 
+    taskList.appendChild(card);
+  });
 
-            taskList.appendChild(
-                card
-            );
+  updateStats();
 
-        }
-    );
-
-
-    updateStats();
-
-
-    taskDate.textContent =
-        new Date().toLocaleDateString(
-            "en-US",
-            {
-                weekday: "long",
-                month: "long",
-                day: "numeric",
-                year: "numeric"
-            }
-        );
-
+  taskDate.textContent = new Date().toLocaleDateString("en-US", {
+    weekday: "long",
+    month: "long",
+    day: "numeric",
+    year: "numeric",
+  });
 }
-
 
 /* =========================================================
    TASK EVENTS
 ========================================================= */
 
-taskList.addEventListener(
-    "change",
-    async function (event) {
+taskList.addEventListener("change", async function (event) {
+  if (!event.target.classList.contains("task-checkbox")) {
+    return;
+  }
 
-        if (
-            !event.target.classList.contains(
-                "task-checkbox"
-            )
-        ) {
-            return;
-        }
+  const id = event.target.dataset.id;
 
+  const tasks = getTodayTasks();
 
-        const id =
-            event.target.dataset.id;
+  const task = tasks.find((item) => item.id === id);
 
-        const tasks =
-            getTodayTasks();
+  if (!task) {
+    return;
+  }
 
-        const task =
-            tasks.find(
-                item =>
-                    item.id === id
-            );
+  task.completed = event.target.checked;
 
-        if (!task) {
-            return;
-        }
+  await persist();
 
+  renderToday();
+});
 
-        task.completed =
-            event.target.checked;
+taskList.addEventListener("click", async function (event) {
+  const editButton = event.target.closest("[data-edit]");
 
+  const deleteButton = event.target.closest("[data-delete]");
 
-        await persist();
+  if (editButton) {
+    openEditTaskModal(editButton.dataset.edit);
 
-        renderToday();
+    return;
+  }
 
+  if (deleteButton) {
+    const confirmed = confirm("Delete this task?");
+
+    if (!confirmed) {
+      return;
     }
-);
 
+    const id = deleteButton.dataset.delete;
 
-taskList.addEventListener(
-    "click",
-    async function (event) {
+    const today = getTodayKey();
 
-        const editButton =
-            event.target.closest(
-                "[data-edit]"
-            );
+    appData.tasksByDate[today] = getTodayTasks().filter(
+      (task) => task.id !== id,
+    );
 
-        const deleteButton =
-            event.target.closest(
-                "[data-delete]"
-            );
+    await persist();
 
-
-        if (editButton) {
-
-            openEditTaskModal(
-                editButton.dataset.edit
-            );
-
-            return;
-
-        }
-
-
-        if (deleteButton) {
-
-            const confirmed =
-                confirm(
-                    "Delete this task?"
-                );
-
-            if (!confirmed) {
-                return;
-            }
-
-
-            const id =
-                deleteButton.dataset.delete;
-
-            const today =
-                getTodayKey();
-
-
-            appData.tasksByDate[today] =
-                getTodayTasks().filter(
-                    task =>
-                        task.id !== id
-                );
-
-
-            await persist();
-
-            renderToday();
-
-        }
-
-    }
-);
-
+    renderToday();
+  }
+});
 
 /* =========================================================
    STATS
 ========================================================= */
 
 function updateStats() {
+  const tasks = getTodayTasks();
 
-    const tasks =
-        getTodayTasks();
+  const total = tasks.length;
 
-    const total =
-        tasks.length;
+  const completed = tasks.filter((task) => task.completed).length;
 
-    const completed =
-        tasks.filter(
-            task =>
-                task.completed
-        ).length;
+  const remaining = total - completed;
 
-    const remaining =
-        total - completed;
+  const percentage = total === 0 ? 0 : Math.round((completed / total) * 100);
 
-    const percentage =
-        total === 0
-            ? 0
-            : Math.round(
-                (completed / total) *
-                100
-            );
+  totalTasks.textContent = total;
 
+  completedTasks.textContent = completed;
 
-    totalTasks.textContent =
-        total;
+  remainingTasks.textContent = remaining;
 
-    completedTasks.textContent =
-        completed;
-
-    remainingTasks.textContent =
-        remaining;
-
-    progress.textContent =
-        `${percentage}%`;
+  progress.textContent = `${percentage}%`;
 }
-
 
 /* =========================================================
    TIME
 ========================================================= */
 
 function formatTime(time) {
+  if (!time) {
+    return "";
+  }
 
-    if (!time) {
-        return "";
-    }
+  const [hours, minutes] = time.split(":");
 
-    const [hours, minutes] =
-        time.split(":");
+  const date = new Date();
 
-    const date =
-        new Date();
+  date.setHours(Number(hours), Number(minutes));
 
-    date.setHours(
-        Number(hours),
-        Number(minutes)
-    );
-
-    return date.toLocaleTimeString(
-        "en-US",
-        {
-            hour: "numeric",
-            minute: "2-digit"
-        }
-    );
+  return date.toLocaleTimeString("en-US", {
+    hour: "numeric",
+    minute: "2-digit",
+  });
 }
-
 
 /* =========================================================
    HISTORY
 ========================================================= */
 
 function getHistoryDates() {
-
-    return Object.keys(
-        appData.tasksByDate
+  return Object.keys(appData.tasksByDate)
+    .filter(
+      (date) =>
+        Array.isArray(appData.tasksByDate[date]) &&
+        appData.tasksByDate[date].length > 0,
     )
-        .filter(
-            date =>
-                Array.isArray(
-                    appData.tasksByDate[date]
-                ) &&
-                appData.tasksByDate[date].length > 0
-        )
-        .sort(
-            (a, b) =>
-                b.localeCompare(a)
-        );
+    .sort((a, b) => b.localeCompare(a));
 }
 
-
 function renderHistory() {
+  const dates = getHistoryDates();
 
-    const dates =
-        getHistoryDates();
+  historyList.innerHTML = "";
 
-
-    historyList.innerHTML = "";
-
-
-    if (dates.length === 0) {
-
-        historyList.innerHTML = `
+  if (dates.length === 0) {
+    historyList.innerHTML = `
             <div class="history-empty">
                 No previous tasks yet.
             </div>
         `;
 
-        return;
-    }
+    return;
+  }
 
+  dates.forEach((date) => {
+    const tasks = appData.tasksByDate[date];
 
-    dates.forEach(
-        date => {
+    const completed = tasks.filter((task) => task.completed).length;
 
-            const tasks =
-                appData.tasksByDate[
-                    date
-                ];
+    const item = document.createElement("div");
 
-            const completed =
-                tasks.filter(
-                    task =>
-                        task.completed
-                ).length;
+    item.className = `history-day ${
+      selectedHistoryDate === date ? "active" : ""
+    }`;
 
+    item.dataset.date = date;
 
-            const item =
-                document.createElement(
-                    "div"
-                );
-
-            item.className =
-                `history-day ${
-                    selectedHistoryDate === date
-                        ? "active"
-                        : ""
-                }`;
-
-
-            item.dataset.date =
-                date;
-
-
-            item.innerHTML = `
+    item.innerHTML = `
 
                 <div class="history-day-top">
 
@@ -1539,60 +1272,30 @@ function renderHistory() {
 
             `;
 
-
-            historyList.appendChild(
-                item
-            );
-
-        }
-    );
-
+    historyList.appendChild(item);
+  });
 }
 
+historyList.addEventListener("click", function (event) {
+  const day = event.target.closest(".history-day");
 
-historyList.addEventListener(
-    "click",
-    function (event) {
+  if (!day) {
+    return;
+  }
 
-        const day =
-            event.target.closest(
-                ".history-day"
-            );
+  selectedHistoryDate = day.dataset.date;
 
-        if (!day) {
-            return;
-        }
+  renderHistory();
 
+  renderHistoryDetails(selectedHistoryDate);
+});
 
-        selectedHistoryDate =
-            day.dataset.date;
+function renderHistoryDetails(date) {
+  const tasks = appData.tasksByDate[date] || [];
 
-        renderHistory();
+  const completed = tasks.filter((task) => task.completed).length;
 
-        renderHistoryDetails(
-            selectedHistoryDate
-        );
-
-    }
-);
-
-
-function renderHistoryDetails(
-    date
-) {
-
-    const tasks =
-        appData.tasksByDate[date] || [];
-
-
-    const completed =
-        tasks.filter(
-            task =>
-                task.completed
-        ).length;
-
-
-    historyDetails.innerHTML = `
+  historyDetails.innerHTML = `
 
         <div class="history-details-title">
 
@@ -1607,14 +1310,11 @@ function renderHistoryDetails(
 
         </div>
 
-        ${tasks.map(
-            task => `
+        ${tasks
+          .map(
+            (task) => `
                 <div
-                    class="history-task ${
-                        task.completed
-                            ? "completed"
-                            : ""
-                    }"
+                    class="history-task ${task.completed ? "completed" : ""}"
                 >
 
                     <div class="history-task-check">
@@ -1626,8 +1326,9 @@ function renderHistoryDetails(
                     </div>
 
                 </div>
-            `
-        ).join("")}
+            `,
+          )
+          .join("")}
 
         <button
             class="import-day-btn"
@@ -1638,96 +1339,55 @@ function renderHistoryDetails(
 
     `;
 
-
-    document
-        .getElementById("importDayBtn")
-        ?.addEventListener(
-            "click",
-            () => importDay(date)
-        );
-
+  document
+    .getElementById("importDayBtn")
+    ?.addEventListener("click", () => importDay(date));
 }
-
 
 function importDay(date) {
+  const source = appData.tasksByDate[date] || [];
 
-    const source =
-        appData.tasksByDate[date] || [];
+  if (!source.length) {
+    return;
+  }
 
+  const today = getTodayKey();
 
-    if (!source.length) {
-        return;
-    }
+  if (!Array.isArray(appData.tasksByDate[today])) {
+    appData.tasksByDate[today] = [];
+  }
 
+  const imported = source.map((task) => ({
+    ...task,
 
-    const today =
-        getTodayKey();
+    id: generateId(),
 
+    completed: false,
 
-    if (
-        !Array.isArray(
-            appData.tasksByDate[today]
-        )
-    ) {
+    createdAt: new Date().toISOString(),
+  }));
 
-        appData.tasksByDate[today] =
-            [];
+  appData.tasksByDate[today].push(...imported);
 
-    }
+  persist().then(() => {
+    renderToday();
 
+    closeHistoryModal();
 
-    const imported =
-        source.map(
-            task => ({
-
-                ...task,
-
-                id:
-                    generateId(),
-
-                completed:
-                    false,
-
-                createdAt:
-                    new Date().toISOString()
-
-            })
-        );
-
-
-    appData.tasksByDate[today].push(
-        ...imported
-    );
-
-
-    persist().then(
-        () => {
-
-            renderToday();
-
-            closeHistoryModal();
-
-            alert(
-                `${imported.length} task(s) imported to today.`
-            );
-
-        }
-    );
-
+    alert(`${imported.length} task(s) imported to today.`);
+  });
 }
-
 
 /* =========================================================
    HISTORY MODAL
 ========================================================= */
 
 function openHistoryModal() {
+  selectedHistoryDate = null;
 
-    selectedHistoryDate = null;
+  renderHistory();
 
-    renderHistory();
-
-    historyDetails.innerHTML = `
+  historyDetails.innerHTML = `
 
         <div class="history-placeholder">
 
@@ -1747,352 +1407,155 @@ function openHistoryModal() {
 
     `;
 
-
-    historyOverlay.classList.add(
-        "active"
-    );
-
+  historyOverlay.classList.add("active");
 }
-
 
 function closeHistoryModal() {
-
-    historyOverlay.classList.remove(
-        "active"
-    );
-
+  historyOverlay.classList.remove("active");
 }
 
+historyBtn.addEventListener("click", openHistoryModal);
 
-historyBtn.addEventListener(
-    "click",
-    openHistoryModal
-);
+closeHistory.addEventListener("click", closeHistoryModal);
 
-
-closeHistory.addEventListener(
-    "click",
-    closeHistoryModal
-);
-
-
-historyOverlay.addEventListener(
-    "click",
-    function (event) {
-
-        if (
-            event.target ===
-            historyOverlay
-        ) {
-
-            closeHistoryModal();
-
-        }
-
-    }
-);
-
+historyOverlay.addEventListener("click", function (event) {
+  if (event.target === historyOverlay) {
+    closeHistoryModal();
+  }
+});
 
 /* =========================================================
    WEEKLY PERFORMANCE
 ========================================================= */
 
 function getWeekDates() {
+  const today = new Date();
 
-    const today =
-        new Date();
+  today.setHours(0, 0, 0, 0);
 
-    today.setHours(
-        0, 0, 0, 0
-    );
+  const day = today.getDay();
 
+  const mondayOffset = day === 0 ? -6 : 1 - day;
 
-    const day =
-        today.getDay();
+  const monday = new Date(today);
 
-    const mondayOffset =
-        day === 0
-            ? -6
-            : 1 - day;
+  monday.setDate(today.getDate() + mondayOffset);
 
+  const dates = [];
 
-    const monday =
-        new Date(today);
+  for (let i = 0; i < 7; i++) {
+    const date = new Date(monday);
 
-    monday.setDate(
-        today.getDate() +
-        mondayOffset
-    );
+    date.setDate(monday.getDate() + i);
 
+    const key = date.toISOString().slice(0, 10);
 
-    const dates = [];
+    dates.push(key);
+  }
 
-
-    for (
-        let i = 0;
-        i < 7;
-        i++
-    ) {
-
-        const date =
-            new Date(monday);
-
-        date.setDate(
-            monday.getDate() + i
-        );
-
-
-        const key =
-            date.toISOString()
-                .slice(0, 10);
-
-        dates.push(key);
-
-    }
-
-
-    return dates;
+  return dates;
 }
-
 
 function updateWeeklyPerformance() {
+  const dates = getWeekDates();
 
-    const dates =
-        getWeekDates();
+  let total = 0;
 
+  let completed = 0;
 
-    let total =
-        0;
+  let active = 0;
 
-    let completed =
-        0;
+  let best = null;
 
-    let active =
-        0;
+  const dayData = dates.map((date) => {
+    const tasks = appData.tasksByDate[date] || [];
 
-    let best =
-        null;
+    const done = tasks.filter((task) => task.completed).length;
 
+    total += tasks.length;
 
-    const dayData =
-        dates.map(
-            date => {
+    completed += done;
 
-                const tasks =
-                    appData.tasksByDate[
-                        date
-                    ] || [];
-
-
-                const done =
-                    tasks.filter(
-                        task =>
-                            task.completed
-                    ).length;
-
-
-                total +=
-                    tasks.length;
-
-                completed +=
-                    done;
-
-
-                if (tasks.length > 0) {
-                    active++;
-                }
-
-
-                if (
-                    !best ||
-                    done > best.completed
-                ) {
-
-                    best = {
-
-                        date,
-
-                        completed:
-                            done,
-
-                        total:
-                            tasks.length
-
-                    };
-
-                }
-
-
-                return {
-                    date,
-                    total: tasks.length,
-                    completed: done
-                };
-
-            }
-        );
-
-
-    const percentage =
-        total === 0
-            ? 0
-            : Math.round(
-                (completed / total) *
-                100
-            );
-
-
-    weeklyPercent.textContent =
-        `${percentage}%`;
-
-
-    weeklyCompleted.textContent =
-        completed;
-
-
-    activeDays.textContent =
-        `${active} / 7`;
-
-
-    if (
-        best &&
-        best.total > 0
-    ) {
-
-        bestDay.textContent =
-            getDateFromKey(
-                best.date
-            ).toLocaleDateString(
-                "en-US",
-                {
-                    weekday: "short"
-                }
-            );
-
-    } else {
-
-        bestDay.textContent =
-            "—";
-
+    if (tasks.length > 0) {
+      active++;
     }
 
+    if (!best || done > best.completed) {
+      best = {
+        date,
 
-    weekTotal.textContent =
-        `${total} task${total === 1 ? "" : "s"}`;
+        completed: done,
 
+        total: tasks.length,
+      };
+    }
 
-    updateGauge(
-        percentage
+    return {
+      date,
+      total: tasks.length,
+      completed: done,
+    };
+  });
+
+  const percentage = total === 0 ? 0 : Math.round((completed / total) * 100);
+
+  weeklyPercent.textContent = `${percentage}%`;
+
+  weeklyCompleted.textContent = completed;
+
+  activeDays.textContent = `${active} / 7`;
+
+  if (best && best.total > 0) {
+    bestDay.textContent = getDateFromKey(best.date).toLocaleDateString(
+      "en-US",
+      {
+        weekday: "short",
+      },
     );
+  } else {
+    bestDay.textContent = "—";
+  }
 
+  weekTotal.textContent = `${total} task${total === 1 ? "" : "s"}`;
 
-    renderWeekBars(
-        dayData
-    );
+  updateGauge(percentage);
 
+  renderWeekBars(dayData);
 }
 
+function updateGauge(percentage) {
+  const radius = 86;
 
-function updateGauge(
-    percentage
-) {
+  const circumference = 2 * Math.PI * radius;
 
-    const radius =
-        86;
+  weeklyGauge.style.strokeDasharray = circumference;
 
-    const circumference =
-        2 *
-        Math.PI *
-        radius;
+  const offset = circumference - (percentage / 100) * circumference;
 
-
-    weeklyGauge.style.strokeDasharray =
-        circumference;
-
-
-    const offset =
-        circumference -
-        (
-            percentage /
-            100
-        ) *
-        circumference;
-
-
-    weeklyGauge.style.strokeDashoffset =
-        offset;
-
+  weeklyGauge.style.strokeDashoffset = offset;
 }
 
+function renderWeekBars(data) {
+  weekBars.innerHTML = "";
 
-function renderWeekBars(
-    data
-) {
+  const max = Math.max(...data.map((item) => item.total), 1);
 
-    weekBars.innerHTML = "";
+  data.forEach((item) => {
+    const date = getDateFromKey(item.date);
 
+    const label = date.toLocaleDateString("en-US", {
+      weekday: "narrow",
+    });
 
-    const max =
-        Math.max(
-            ...data.map(
-                item =>
-                    item.total
-            ),
-            1
-        );
+    const height = item.total === 0 ? 2 : Math.max(8, (item.total / max) * 100);
 
+    const fill = item.total === 0 ? 2 : (item.completed / item.total) * height;
 
-    data.forEach(
-        item => {
+    const wrapper = document.createElement("div");
 
-            const date =
-                getDateFromKey(
-                    item.date
-                );
+    wrapper.className = "day-bar";
 
-
-            const label =
-                date.toLocaleDateString(
-                    "en-US",
-                    {
-                        weekday: "narrow"
-                    }
-                );
-
-
-            const height =
-                item.total === 0
-                    ? 2
-                    : Math.max(
-                        8,
-                        (
-                            item.total /
-                            max
-                        ) *
-                        100
-                    );
-
-
-            const fill =
-                item.total === 0
-                    ? 2
-                    : (
-                        item.completed /
-                        item.total
-                    ) *
-                    height;
-
-
-            const wrapper =
-                document.createElement(
-                    "div"
-                );
-
-            wrapper.className =
-                "day-bar";
-
-
-            wrapper.innerHTML = `
+    wrapper.innerHTML = `
 
                 <div class="bar-track">
 
@@ -2109,54 +1572,67 @@ function renderWeekBars(
 
             `;
 
-
-            weekBars.appendChild(
-                wrapper
-            );
-
-        }
-    );
-
+    weekBars.appendChild(wrapper);
+  });
 }
-
 
 /* =========================================================
    KEYBOARD
 ========================================================= */
 
-document.addEventListener(
-    "keydown",
-    function (event) {
+document.addEventListener("keydown", function (event) {
+  if (event.key === "Escape") {
+    closeTaskModalFn();
 
-        if (
-            event.key === "Escape"
-        ) {
+    closeHistoryModal();
+  }
 
-            closeTaskModalFn();
+  if (
+    event.ctrlKey &&
+    event.key.toLowerCase() === "n" &&
+    !app.classList.contains("hidden")
+  ) {
+    event.preventDefault();
 
-            closeHistoryModal();
-
-        }
-
-
-        if (
-            event.ctrlKey &&
-            event.key.toLowerCase() === "n" &&
-            !app.classList.contains("hidden")
-        ) {
-
-            event.preventDefault();
-
-            openAddTaskModal();
-
-        }
-
-    }
-);
-
+    openAddTaskModal();
+  }
+});
 
 /* =========================================================
    START
 ========================================================= */
 
 updateAuthMode();
+
+/* =========================================================
+   PERSONALIZED USER BRANDING
+========================================================= */
+
+const authBrand = document.getElementById("authBrand");
+const brandName = document.getElementById("brandName");
+const modalBrand = document.getElementById("modalBrand");
+
+function updatePersonalizedBrand(name) {
+  const displayName = (name || "").trim();
+
+  if (authBrand) {
+    authBrand.textContent = displayName || "Welcome";
+  }
+
+  if (brandName) {
+    brandName.textContent = displayName || "Welcome";
+  }
+
+  if (modalBrand) {
+    modalBrand.textContent = displayName
+      ? `${displayName.toUpperCase()}'S SPACE`
+      : "YOUR SPACE";
+  }
+}
+
+// Update the login screen while the user types.
+if (usernameInput) {
+  usernameInput.addEventListener("input", () => {
+    updatePersonalizedBrand(usernameInput.value);
+  });
+}
